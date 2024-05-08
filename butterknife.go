@@ -37,26 +37,33 @@ func write(varValue interface{}, wr writer, varName ...string) {
 	wr.Writef("[%s:%d %s] %s = %v\n", file, line, funcName, vn, varValue)
 }
 
+func createSpaces(i int) string {
+	spaces := ""
+	for j := 0; j < i; j++ {
+		spaces += "  "
+	}
+	return spaces
+}
+
 func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
-	for i := 1; ; i++ {
-		spaces := ""
-		for j := 0; j < i-1; j++ {
-			spaces += "  "
-		}
+	layers := []string{}
+	for i := 2; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
 		if !ok {
-			vn := "Var"
-			if len(varName) > 0 {
-				vn = varName[0]
-			}
-			wr.Writef("%s%s = %v\n", spaces, vn, varValue)
 			break
 		}
 		pc, _, _, _ := runtime.Caller(i)
 		funcName := runtime.FuncForPC(pc).Name()
-		wr.Writef("%s[%s:%d %s]\n", spaces, file, line, funcName)
-
+		layers = append(layers, fmt.Sprintf("[%s:%d %s]", file, line, funcName))
 	}
+	for i := len(layers) - 1; i >= 0; i-- {
+		wr.Writef("%s%s\n", createSpaces(len(layers)-1-i), layers[i])
+	}
+	vn := "Var"
+	if len(varName) > 0 {
+		vn = varName[0]
+	}
+	wr.Writef("%s%s = %v\n", createSpaces(len(layers)), vn, varValue)
 }
 
 // Uses fmt to print formats and prints the value of the variable and its caller.
