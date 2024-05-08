@@ -30,8 +30,7 @@ func LogConcurrent(varValue interface{}, varName ...string)
 Fetch the module
 
 ```bash
-go get github.com/yourusername/butterknife
-go mod tidy
+go get github.com/Yifeeeeei/butterknife
 ```
 
 Import the package
@@ -39,4 +38,3 @@ Import the package
 ```go
 import "github.com/Yifeeeeei/butterknife"
 ```
-

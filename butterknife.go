@@ -6,23 +6,23 @@ import (
 	"runtime"
 )
 
-type Writer interface {
+type writer interface {
 	Writef(format string, args ...interface{})
 }
 
-type Logger struct{}
+type logger struct{}
 
-func (l Logger) Writef(format string, args ...interface{}) {
+func (l logger) Writef(format string, args ...interface{}) {
 	log.Printf(format, args...)
 }
 
-type Printer struct{}
+type printer struct{}
 
-func (p Printer) Writef(format string, args ...interface{}) {
+func (p printer) Writef(format string, args ...interface{}) {
 	fmt.Printf(format, args...)
 }
 
-func Write(varValue interface{}, wr Writer, varName ...string) {
+func write(varValue interface{}, wr writer, varName ...string) {
 	_, file, line, ok := runtime.Caller(1)
 	if !ok {
 		fmt.Println("Failed to get caller info")
@@ -37,7 +37,7 @@ func Write(varValue interface{}, wr Writer, varName ...string) {
 	wr.Writef("[%s:%d %s] %s = %v\n", file, line, funcName, vn, varValue)
 }
 
-func WriteConcurrent(varValue interface{}, wr Writer, varName ...string) {
+func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
 	for i := 1; ; i++ {
 		spaces := ""
 		for j := 0; j < i-1; j++ {
@@ -66,7 +66,7 @@ func WriteConcurrent(varValue interface{}, wr Writer, varName ...string) {
 //
 // It does not return any value.
 func Print(varValue interface{}, varName ...string) {
-	Write(varValue, Printer{}, varName...)
+	write(varValue, printer{}, varName...)
 }
 
 // Uses fmt to print formats and prints the value of the variable and all its callers.
@@ -76,7 +76,7 @@ func Print(varValue interface{}, varName ...string) {
 //
 // It does not return any value.
 func PrintConcurrent(varValue interface{}, varName ...string) {
-	WriteConcurrent(varValue, Printer{}, varName...)
+	writeConcurrent(varValue, printer{}, varName...)
 }
 
 // Uses log to print formats and prints the value of the variable and its caller.
@@ -86,7 +86,7 @@ func PrintConcurrent(varValue interface{}, varName ...string) {
 //
 // It does not return any value.
 func Log(varValue interface{}, varName ...string) {
-	Write(varValue, Logger{}, varName...)
+	write(varValue, logger{}, varName...)
 }
 
 // Uses log to print formats and prints the value of the variable and all its callers.
@@ -96,5 +96,5 @@ func Log(varValue interface{}, varName ...string) {
 //
 // It does not return any value.
 func LogConcurrent(varValue interface{}, varName ...string) {
-	WriteConcurrent(varValue, Logger{}, varName...)
+	writeConcurrent(varValue, logger{}, varName...)
 }
