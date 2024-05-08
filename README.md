@@ -42,10 +42,6 @@ import "github.com/Yifeeeeei/butterknife"
 Use the functions
 
 ```go
-package main
-
-import "test/butterknife"
-
 func caller(num int) {
 	butterknife.PrintConcurrent(num, "num")
 }
