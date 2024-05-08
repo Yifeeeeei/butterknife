@@ -22,7 +22,7 @@ func (p printer) Writef(format string, args ...interface{}) {
 	fmt.Printf(format, args...)
 }
 
-func write(varValue interface{}, wr writer, varName ...string) {
+func write(varValue interface{}, wr writer, comments ...string) {
 	_, file, line, ok := runtime.Caller(2)
 	if !ok {
 		fmt.Println("Failed to get caller info")
@@ -30,14 +30,18 @@ func write(varValue interface{}, wr writer, varName ...string) {
 	}
 	pc, _, _, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
-	vn := "Var"
-	if len(varName) > 0 {
-		vn = varName[0]
+	if len(comments) > 0 {
+		vn := ""
+		for _, v := range comments {
+			vn += v + " "
+		}
+		wr.Writef("[%s:%d %s] %s: %v\n", file, line, funcName, vn, varValue)
+	} else {
+		wr.Writef("[%s:%d %s] %v\n", file, line, funcName, varValue)
 	}
-	wr.Writef("[%s:%d %s] %s = %v\n", file, line, funcName, vn, varValue)
 }
 
-func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
+func writeConcurrent(varValue interface{}, wr writer, comments ...string) {
 	layers := []string{}
 	for i := 0; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
@@ -53,49 +57,53 @@ func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
 		wr.Writef("%s%s\n", spaces, layers[i])
 		spaces += "  "
 	}
-	vn := "Var"
-	if len(varName) > 0 {
-		vn = varName[0]
+	if len(comments) > 0 {
+		vn := ""
+		for _, v := range comments {
+			vn += v + " "
+		}
+		wr.Writef("%s%s: %v\n", spaces, vn, varValue)
+	} else {
+		wr.Writef("%s %v\n", spaces, varValue)
 	}
-	wr.Writef("%s%s = %v\n", spaces, vn, varValue)
 }
 
 // Uses fmt to print formats and prints the value of the variable and its caller.
 // The function takes two parameters:
 //   - varValue: the value of the variable.
-//   - name: the name of the variable (optional)
+//   - comments: you might want to put the name of the variable here (optional)
 //
 // It does not return any value.
-func Print(varValue interface{}, varName ...string) {
-	write(varValue, printer{}, varName...)
+func Print(varValue interface{}, comments ...string) {
+	write(varValue, printer{}, comments...)
 }
 
 // Uses fmt to print formats and prints the value of the variable and all its callers.
 // The function takes two parameters:
 //   - varValue: the value of the variable.
-//   - name: the name of the variable (optional)
+//   - comments: you might want to put the name of the variable here (optional)
 //
 // It does not return any value.
-func PrintConcurrent(varValue interface{}, varName ...string) {
-	writeConcurrent(varValue, printer{}, varName...)
+func PrintConcurrent(varValue interface{}, comments ...string) {
+	writeConcurrent(varValue, printer{}, comments...)
 }
 
 // Uses log to print formats and prints the value of the variable and its caller.
 // The function takes two parameters:
 //   - varValue: the value of the variable.
-//   - name: the name of the variable (optional)
+//   - comments: you might want to put the name of the variable here (optional)
 //
 // It does not return any value.
-func Log(varValue interface{}, varName ...string) {
-	write(varValue, logger{}, varName...)
+func Log(varValue interface{}, comments ...string) {
+	write(varValue, logger{}, comments...)
 }
 
 // Uses log to print formats and prints the value of the variable and all its callers.
 // The function takes two parameters:
 //   - varValue: the value of the variable.
-//   - name: the name of the variable (optional)
+//   - comments: you might want to put the name of the variable here (optional)
 //
 // It does not return any value.
-func LogConcurrent(varValue interface{}, varName ...string) {
-	writeConcurrent(varValue, logger{}, varName...)
+func LogConcurrent(varValue interface{}, comments ...string) {
+	writeConcurrent(varValue, logger{}, comments...)
 }
