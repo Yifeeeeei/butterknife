@@ -23,12 +23,12 @@ func (p printer) Writef(format string, args ...interface{}) {
 }
 
 func write(varValue interface{}, wr writer, varName ...string) {
-	_, file, line, ok := runtime.Caller(1)
+	_, file, line, ok := runtime.Caller(2)
 	if !ok {
 		fmt.Println("Failed to get caller info")
 		return
 	}
-	pc, _, _, _ := runtime.Caller(1)
+	pc, _, _, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
 	vn := "Var"
 	if len(varName) > 0 {
