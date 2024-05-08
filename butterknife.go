@@ -47,7 +47,7 @@ func createSpaces(i int) string {
 
 func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
 	layers := []string{}
-	for i := 2; ; i++ {
+	for i := 0; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
 		if !ok {
 			break
@@ -56,14 +56,16 @@ func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
 		funcName := runtime.FuncForPC(pc).Name()
 		layers = append(layers, fmt.Sprintf("[%s:%d %s]", file, line, funcName))
 	}
-	for i := len(layers) - 1; i >= 0; i-- {
-		wr.Writef("%s%s\n", createSpaces(len(layers)-1-i), layers[i])
+	spaces := ""
+	for i := len(layers) - 3; i >= 2; i-- {
+		wr.Writef("%s%s\n", spaces, layers[i])
+		spaces += "  "
 	}
 	vn := "Var"
 	if len(varName) > 0 {
 		vn = varName[0]
 	}
-	wr.Writef("%s%s = %v\n", createSpaces(len(layers)), vn, varValue)
+	wr.Writef("%s%s = %v\n", spaces, vn, varValue)
 }
 
 // Uses fmt to print formats and prints the value of the variable and its caller.
