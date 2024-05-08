@@ -37,14 +37,6 @@ func write(varValue interface{}, wr writer, varName ...string) {
 	wr.Writef("[%s:%d %s] %s = %v\n", file, line, funcName, vn, varValue)
 }
 
-func createSpaces(i int) string {
-	spaces := ""
-	for j := 0; j < i; j++ {
-		spaces += "  "
-	}
-	return spaces
-}
-
 func writeConcurrent(varValue interface{}, wr writer, varName ...string) {
 	layers := []string{}
 	for i := 0; ; i++ {
