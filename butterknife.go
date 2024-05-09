@@ -3,9 +3,22 @@ package butterknife
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 )
+
+func getRelativeFilePath(filePath string) string {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		return filePath
+	}
+	relativePath, err := filepath.Rel(currentDir, filePath)
+	if err != nil {
+		return filePath
+	}
+	return relativePath
+}
 
 type writer interface {
 	writef(format string, args ...interface{})
@@ -47,7 +60,7 @@ func writef(wr writer, format string, args ...interface{}) {
 	}
 	pc, _, _, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
-	file = filepath.Base(file)
+	file = getRelativeFilePath(file)
 	header := fmt.Sprintf("[%s:%d %s]  ", file, line, funcName)
 	msg := fmt.Sprintf(format, args...)
 	wr.write(header + msg + "\n")
@@ -61,7 +74,7 @@ func write(wr writer, args ...interface{}) {
 	}
 	pc, _, _, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
-	file = filepath.Base(file)
+	file = getRelativeFilePath(file)
 	header := fmt.Sprintf("[%s:%d %s]  ", file, line, funcName)
 	msg := fmt.Sprint(args...)
 	wr.write(header + msg + "\n")
@@ -75,7 +88,7 @@ func writeln(wr writer, args ...interface{}) {
 	}
 	pc, _, _, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
-	file = filepath.Base(file)
+	file = getRelativeFilePath(file)
 	header := fmt.Sprintf("[%s:%d %s]  ", file, line, funcName)
 	msg := fmt.Sprintln(args...)
 	wr.write(header + msg)
@@ -90,7 +103,7 @@ func writelnHierarchy(wr writer, args ...interface{}) {
 		}
 		pc, _, _, _ := runtime.Caller(i)
 		funcName := runtime.FuncForPC(pc).Name()
-		file = filepath.Base(file)
+		file = getRelativeFilePath(file)
 		layers = append(layers, fmt.Sprintf("[%s:%d %s]", file, line, funcName))
 	}
 	msg := ""
@@ -113,7 +126,7 @@ func writeHierarchy(wr writer, args ...interface{}) {
 		}
 		pc, _, _, _ := runtime.Caller(i)
 		funcName := runtime.FuncForPC(pc).Name()
-		file = filepath.Base(file)
+		file = getRelativeFilePath(file)
 		layers = append(layers, fmt.Sprintf("[%s:%d %s]", file, line, funcName))
 	}
 	msg := ""
@@ -136,7 +149,7 @@ func writefHierarchy(wr writer, format string, args ...interface{}) {
 		}
 		pc, _, _, _ := runtime.Caller(i)
 		funcName := runtime.FuncForPC(pc).Name()
-		file = filepath.Base(file)
+		file = getRelativeFilePath(file)
 		layers = append(layers, fmt.Sprintf("[%s:%d %s]", file, line, funcName))
 	}
 	msg := ""
