@@ -45,7 +45,7 @@ func main() {
 	// [main.go:13 main.main]  a b
 
 	butterknife.Printf("a:%s ,b:%s\n", a, b)
-	// [[main.go:16 main.main]  a:a ,b:b
+	// [main.go:16 main.main]  a:a ,b:b
 
 	caller()
 }
