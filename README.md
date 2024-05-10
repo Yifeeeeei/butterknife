@@ -1,14 +1,13 @@
 # butterknife 🧈🗡️
-A printing tool for Golang debugging. It works like "fmt" or "log", but it prints out something else alongside, including:
+A printing tool for Golang debugging. Prints out the function call hierarchy alongside the content. By hierarchy, it means
 
-- the line number and file that calls it
-- the function that wraps over it
-- the function that wraps over the function that wraps over it
-- ...
+- the function call that wraps over butterknife's print
+- the function call that wraps over the function call that wraps over butterknife's print
+- ... all the way up
 
 Spreads the whole thing onto the terminal smoothly.
 
-Note: cmd + click on the line number to jump right to it
+It also prints out the line number of the code in the file, cmd + click to navigate to the line of code.
 
 # usage
 
@@ -36,52 +35,52 @@ import (
 )
 
 func main() {
-	a := "a"
-	b := "b"
-	butterknife.Print(a, b)
-	// [main.go:10 main.main]  ab
-
-	butterknife.Println(a, b)
-	// [main.go:13 main.main]  a b
-
-	butterknife.Printf("a:%s ,b:%s\n", a, b)
-	// [main.go:16 main.main]  a:a ,b:b
-
-	caller()
+	mainHello := "hello from main"
+	butterknife.PrintlnHierarchy(mainHello)
+	// [main.go:9 main.main]
+	//   hello from main
+	firstCaller()
 }
 
-func caller() {
-	c := "c"
-	d := "d"
-	butterknife.PrintHierarchy(c, d)
-	// [main.go:19 main.main]
-	//   [main.go:25 main.caller]
-	//     cd
+func firstCaller() {
+	firstCallerHello := "hello from firstCaller"
+	butterknife.PrintlnHierarchy(firstCallerHello)
+	// [main.go:12 main.main]
+	//   [main.go:17 main.firstCaller]
+	//     hello from firstCaller
+	secondCaller()
+}
 
-	butterknife.PrintlnHierarchy(c, d)
-	// [main.go:19 main.main]
-	//   [main.go:30 main.caller]
-	//     c d
-
-	butterknife.PrintfHierarchy("c:%s ,d:%s\n", c, d)
-	// [main.go:19 main.main]
-	//	[main.go:35 main.caller]
-	//	  c:c ,d:d
+func secondCaller() {
+	secondCallerHello := "hello from secondCaller"
+	butterknife.PrintlnHierarchy(secondCallerHello)
+	// [main.go:12 main.main]
+	//   [main.go:21 main.firstCaller]
+	//     [main.go:26 main.secondCaller]
+	// 	     hello from secondCaller
 }
 
 ```
 
+Full outputs:
+
+```bash
+[main.go:9 main.main]
+  hello from main
+[main.go:12 main.main]
+  [main.go:17 main.firstCaller]
+    hello from firstCaller
+[main.go:12 main.main]
+  [main.go:21 main.firstCaller]
+    [main.go:26 main.secondCaller]
+      hello from secondCaller
+```
+
 # functions
 
-"Print" / "Log": use fmt/log
-
-+
-
-"" / "f" / "ln": normal output / formatted output / line output
-
-+
-
-"" / "Hierarchy": just print one caller / and all callers' callers
+- If you want to use the everyday print, choose functions start with "Print". If you want to use log's print, choose functions start with "Log".
+- For normal print, formatted print or print stuffs with nice little spaces between them, use functions that have "" or "f" or "ln" in the middle.
+- to print out all layers of the caller functions, choose the ones ends with "Hierarchy", if you only want to see one layer of caller function, use the other ones.
 
 ```go
 func Print(args ...interface{})
