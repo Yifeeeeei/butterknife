@@ -21,42 +21,42 @@ func getRelativeFilePath(filePath string) string {
 }
 
 type writer interface {
-	writef(format string, args ...interface{})
-	write(args ...interface{})
-	writeln(args ...interface{})
+	writef(format string, args ...any)
+	write(args ...any)
+	writeln(args ...any)
 }
 
 type logger struct{}
 
-func (logger) writef(format string, args ...interface{}) {
+func (logger) writef(format string, args ...any) {
 	log.Printf("\n"+format, args...)
 }
 
-func (logger) write(args ...interface{}) {
+func (logger) write(args ...any) {
 	msg := fmt.Sprint(args...)
 	log.Printf("\n%s", msg)
 }
 
-func (logger) writeln(args ...interface{}) {
+func (logger) writeln(args ...any) {
 	msg := fmt.Sprintln(args...)
 	log.Printf("\n%s", msg)
 }
 
 type printer struct{}
 
-func (printer) writef(format string, args ...interface{}) {
+func (printer) writef(format string, args ...any) {
 	fmt.Printf(format, args...)
 }
 
-func (printer) write(args ...interface{}) {
+func (printer) write(args ...any) {
 	fmt.Print(args...)
 }
 
-func (printer) writeln(args ...interface{}) {
+func (printer) writeln(args ...any) {
 	fmt.Println(args...)
 }
 
-func writef(wr writer, format string, args ...interface{}) {
+func writef(wr writer, format string, args ...any) {
 	_, file, line, ok := runtime.Caller(2)
 	if !ok {
 		fmt.Println("Failed to get caller info")
@@ -70,7 +70,7 @@ func writef(wr writer, format string, args ...interface{}) {
 	wr.write(header + msg + "\n")
 }
 
-func write(wr writer, args ...interface{}) {
+func write(wr writer, args ...any) {
 	_, file, line, ok := runtime.Caller(2)
 	if !ok {
 		fmt.Println("Failed to get caller info")
@@ -84,7 +84,7 @@ func write(wr writer, args ...interface{}) {
 	wr.write(header + msg + "\n")
 }
 
-func writeln(wr writer, args ...interface{}) {
+func writeln(wr writer, args ...any) {
 	_, file, line, ok := runtime.Caller(2)
 	if !ok {
 		fmt.Println("Failed to get caller info")
@@ -98,7 +98,7 @@ func writeln(wr writer, args ...interface{}) {
 	wr.write(header + msg)
 }
 
-func writelnHierarchy(wr writer, args ...interface{}) {
+func writelnHierarchy(wr writer, args ...any) {
 	layers := []string{}
 	for i := 0; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
@@ -121,7 +121,7 @@ func writelnHierarchy(wr writer, args ...interface{}) {
 	wr.write(msg)
 }
 
-func writeHierarchy(wr writer, args ...interface{}) {
+func writeHierarchy(wr writer, args ...any) {
 	layers := []string{}
 	for i := 0; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
@@ -144,7 +144,7 @@ func writeHierarchy(wr writer, args ...interface{}) {
 	wr.write(msg + "\n")
 }
 
-func writefHierarchy(wr writer, format string, args ...interface{}) {
+func writefHierarchy(wr writer, format string, args ...any) {
 	layers := []string{}
 	for i := 0; ; i++ {
 		_, file, line, ok := runtime.Caller(i)
@@ -171,7 +171,7 @@ func writefHierarchy(wr writer, format string, args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func Print(args ...interface{}) {
+func Print(args ...any) {
 	write(printer{}, args...)
 }
 
@@ -180,7 +180,7 @@ func Print(args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func Printf(format string, args ...interface{}) {
+func Printf(format string, args ...any) {
 	writef(printer{}, format, args...)
 }
 
@@ -188,7 +188,7 @@ func Printf(format string, args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func Println(args ...interface{}) {
+func Println(args ...any) {
 	writeln(printer{}, args...)
 }
 
@@ -196,7 +196,7 @@ func Println(args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func PrintHierarchy(args ...interface{}) {
+func PrintHierarchy(args ...any) {
 	writeHierarchy(printer{}, args...)
 }
 
@@ -205,7 +205,7 @@ func PrintHierarchy(args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func PrintfHierarchy(format string, args ...interface{}) {
+func PrintfHierarchy(format string, args ...any) {
 	writefHierarchy(printer{}, format, args...)
 }
 
@@ -213,7 +213,7 @@ func PrintfHierarchy(format string, args ...interface{}) {
 //   - args: the values to print.
 //
 // It does not return any value.
-func PrintlnHierarchy(args ...interface{}) {
+func PrintlnHierarchy(args ...any) {
 	writelnHierarchy(printer{}, args...)
 }
 
@@ -221,7 +221,7 @@ func PrintlnHierarchy(args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func Log(args ...interface{}) {
+func Log(args ...any) {
 	write(logger{}, args...)
 }
 
@@ -230,7 +230,7 @@ func Log(args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func Logf(format string, args ...interface{}) {
+func Logf(format string, args ...any) {
 	writef(logger{}, format, args...)
 }
 
@@ -238,7 +238,7 @@ func Logf(format string, args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func Logln(args ...interface{}) {
+func Logln(args ...any) {
 	writeln(logger{}, args...)
 }
 
@@ -246,7 +246,7 @@ func Logln(args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func LogHierarchy(args ...interface{}) {
+func LogHierarchy(args ...any) {
 	writeHierarchy(logger{}, args...)
 }
 
@@ -255,7 +255,7 @@ func LogHierarchy(args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func LogfHierarchy(format string, args ...interface{}) {
+func LogfHierarchy(format string, args ...any) {
 	writefHierarchy(logger{}, format, args...)
 }
 
@@ -263,6 +263,6 @@ func LogfHierarchy(format string, args ...interface{}) {
 //   - args: the values to log.
 //
 // It does not return any value.
-func LoglnHierarchy(args ...interface{}) {
+func LoglnHierarchy(args ...any) {
 	writelnHierarchy(logger{}, args...)
 }
