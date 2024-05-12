@@ -28,27 +28,31 @@ type writer interface {
 
 type logger struct{}
 
-func (l logger) writef(format string, args ...interface{}) {
+func (logger) writef(format string, args ...interface{}) {
 	log.Printf("\n"+format, args...)
 }
-func (l logger) write(args ...interface{}) {
+
+func (logger) write(args ...interface{}) {
 	msg := fmt.Sprint(args...)
 	log.Printf("\n%s", msg)
 }
-func (l logger) writeln(args ...interface{}) {
+
+func (logger) writeln(args ...interface{}) {
 	msg := fmt.Sprintln(args...)
 	log.Printf("\n%s", msg)
 }
 
 type printer struct{}
 
-func (p printer) writef(format string, args ...interface{}) {
+func (printer) writef(format string, args ...interface{}) {
 	fmt.Printf(format, args...)
 }
-func (p printer) write(args ...interface{}) {
+
+func (printer) write(args ...interface{}) {
 	fmt.Print(args...)
 }
-func (p printer) writeln(args ...interface{}) {
+
+func (printer) writeln(args ...interface{}) {
 	fmt.Println(args...)
 }
 
