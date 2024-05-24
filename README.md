@@ -83,17 +83,17 @@ Full outputs:
 - to print out all layers of the caller functions, choose the ones ends with "Hierarchy", if you only want to see one layer of caller function, use the other ones.
 
 ```go
-func Print(args ...interface{})
-func Printf(format string, args ...interface{}) 
-func Println(args ...interface{})
-func PrintHierarchy(args ...interface{})
-func PrintfHierarchy(format string, args ...interface{})
-func PrintlnHierarchy(args ...interface{})
-func Log(args ...interface{})
-func Logf(format string, args ...interface{})
-func Logln(args ...interface{}) 
-func LogHierarchy(args ...interface{})
-func LogfHierarchy(format string, args ...interface{})
-func LoglnHierarchy(args ...interface{})
+func Print(args ...any)
+func Printf(format string, args ...any)
+func Println(args ...any)
+func PrintHierarchy(args ...any)
+func PrintfHierarchy(format string, args ...any)
+func PrintlnHierarchy(args ...any)
+func Log(args ...any)
+func Logf(format string, args ...any)
+func Logln(args ...any)
+func LogHierarchy(args ...any)
+func LogfHierarchy(format string, args ...any)
+func LoglnHierarchy(args ...any)
 ```
 
