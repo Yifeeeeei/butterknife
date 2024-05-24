@@ -1,11 +1,22 @@
 package butterknife_test
 
-import "github.com/Yifeeeeei/butterknife"
+import (
+	"testing"
+
+	"github.com/Yifeeeeei/butterknife"
+)
 
 func ExamplePrintln() {
 	mainHello := "hello from main"
 	butterknife.Println(mainHello)
 	firstCallerPrintln()
+}
+
+func TestExamplePrintln(t *testing.T) {
+	if !testing.Verbose() {
+		return
+	}
+	ExamplePrintln()
 }
 
 func firstCallerPrintln() {

@@ -1,11 +1,22 @@
 package butterknife_test
 
-import "github.com/Yifeeeeei/butterknife"
+import (
+	"testing"
+
+	"github.com/Yifeeeeei/butterknife"
+)
 
 func ExampleLogfHierarchy() {
 	mainHello := "hello from main"
 	butterknife.LogfHierarchy("%s", mainHello)
 	firstCallerLogfHierarchy()
+}
+
+func TestExampleLogfHierarchy(t *testing.T) {
+	if !testing.Verbose() {
+		return
+	}
+	ExampleLogfHierarchy()
 }
 
 func firstCallerLogfHierarchy() {

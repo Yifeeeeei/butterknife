@@ -1,11 +1,22 @@
 package butterknife_test
 
-import "github.com/Yifeeeeei/butterknife"
+import (
+	"testing"
+
+	"github.com/Yifeeeeei/butterknife"
+)
 
 func ExamplePrintfHierarchy() {
 	mainHello := "hello from main"
 	butterknife.PrintfHierarchy("%s", mainHello)
 	firstCallerPrintfHierarchy()
+}
+
+func TestExamplePrintfHierarchy(t *testing.T) {
+	if !testing.Verbose() {
+		return
+	}
+	ExamplePrintfHierarchy()
 }
 
 func firstCallerPrintfHierarchy() {
