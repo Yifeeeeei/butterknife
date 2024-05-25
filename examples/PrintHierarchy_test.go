@@ -10,6 +10,7 @@ func ExamplePrintHierarchy() {
 	mainHello := "hello from main"
 	butterknife.PrintHierarchy(mainHello)
 	firstCallerPrintHierarchy()
+	// output:
 }
 
 func TestExamplePrintHierarchy(t *testing.T) {

@@ -10,6 +10,7 @@ func ExamplePrint() {
 	mainHello := "hello from main"
 	butterknife.Print(mainHello)
 	firstCallerPrint()
+	// output:
 }
 
 func TestExamplePrint(t *testing.T) {

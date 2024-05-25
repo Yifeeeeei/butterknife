@@ -10,6 +10,7 @@ func ExampleLogHierarchy() {
 	mainHello := "hello from main"
 	butterknife.LogHierarchy(mainHello)
 	firstCallerLogHierarchy()
+	// output:
 }
 
 func TestExampleLogHierarchy(t *testing.T) {

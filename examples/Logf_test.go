@@ -10,6 +10,7 @@ func ExampleLogf() {
 	mainHello := "hello from main"
 	butterknife.Logf("%s", mainHello)
 	firstCallerLogf()
+	// output:
 }
 
 func TestExampleLogf(t *testing.T) {
