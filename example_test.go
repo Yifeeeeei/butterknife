@@ -8,7 +8,6 @@ func Example() {
 	mainHello := "hello from main"
 	butterknife.PrintlnHierarchy(mainHello)
 	firstCaller()
-
 }
 
 func firstCaller() {
