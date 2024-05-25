@@ -1,32 +1,23 @@
 package butterknife_test
 
 import (
-	"testing"
-
 	"github.com/Yifeeeeei/butterknife"
 )
 
-func ExamplePrintlnHierarchy() {
+func Example() {
 	mainHello := "hello from main"
 	butterknife.PrintlnHierarchy(mainHello)
-	firstCallerPrintlnHierarchy()
-	// output:
+	firstCaller()
+
 }
 
-func TestExamplePrintlnHierarchy(t *testing.T) {
-	if !testing.Verbose() {
-		return
-	}
-	ExamplePrintlnHierarchy()
-}
-
-func firstCallerPrintlnHierarchy() {
+func firstCaller() {
 	firstCallerHello := "hello from firstCaller"
 	butterknife.PrintlnHierarchy(firstCallerHello)
-	secondCallerPrintlnHierarchy()
+	secondCaller()
 }
 
-func secondCallerPrintlnHierarchy() {
+func secondCaller() {
 	secondCallerHello := "hello from secondCaller"
 	butterknife.PrintlnHierarchy(secondCallerHello)
 }
